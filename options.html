@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Settings</title>
+		<link rel="stylesheet" href="style.css">
+	</head>
+
+	<body>
+		<h1>Clock Settings</h1>
+
+		<label for="nameInput">Your Name</label>
+		<input type="text" id="nameInput" placeholder="Enter your name" />
+
+		<label for="formatToggle">12/24 Hour Format</label>
+		<input type="checkbox" id="formatToggle" />
+
+		<label for="bgColor">Background Color</label>
+		<input type="color" id="bgColor" />
+
+		<label for="bgImage">Upload Background Image</label>
+		<input type="file" id="bgImage" accept="image/*" />
+
+		<button id="saveSettings">Save Settings</button>
+
+		<script src="options.js"></script>
+	</body>
+
+</html>
