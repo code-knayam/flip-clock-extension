@@ -5,29 +5,41 @@
 		<meta charset="UTF-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Flip Clock</title>
-		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="assets/style.css">
 	</head>
 
 	<body>
 		<div id="clock-container">
 			<div id="flipClock">
-				<div class="flip-digit" id="hours">
-					<div class="top">00</div>
-					<div class="bottom">00</div>
+				<div class="digit-container" id="hours">
+					<div class="digit">
+						<div class="top">00</div>
+					</div>
+					<div class="digit flipper">
+						<div class="flipper-digit">00</div>
+					</div>
 				</div>
 				<span class="separator">:</span>
-				<div class="flip-digit" id="minutes">
-					<div class="top">00</div>
-					<div class="bottom">00</div>
+				<div class="digit-container" id="minutes">
+					<div class="digit">
+						<div class="top">00</div>
+					</div>
+					<div class="digit flipper">
+						<div class="flipper-digit">00</div>
+					</div>
 				</div>
 				<span class="separator">:</span>
-				<div class="flip-digit" id="seconds">
-					<div class="top">00</div>
-					<div class="bottom">00</div>
+				<div class="digit-container" id="seconds">
+					<div class="digit">
+						<div class="top">00</div>
+					</div>
+					<div class="digit flipper">
+						<div class="flipper-digit">00</div>
+					</div>
 				</div>
 			</div>
 		</div>
-		<script src="newtab.js"></script>
+		<script src="assets/newtab.js"></script>
 	</body>
 
 </html>
