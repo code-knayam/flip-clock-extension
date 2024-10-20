@@ -8,4 +8,4 @@ Transform your new tab into a sleek, futuristic flip-style clock! Inspired by th
 
 ## Sample
 
-![alt text](ss1.png)
+![alt text](./assets/UI.png)
