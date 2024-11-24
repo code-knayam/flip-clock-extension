@@ -1,5 +1,8 @@
 body {
 	margin: 0;
+	font-family: "Cute Font", sans-serif;
+		font-weight: 400;
+		font-style: normal;
 }
 /* Center the container and set a futuristic background */
 #clock-container {
@@ -10,8 +13,6 @@ body {
 	height: 100vh;
 	background-color: black;
 	color: white;
-	font-family: 'Courier New', monospace;
-	/* Stylish monospaced font */
 }
 
 #flipClock {
@@ -37,7 +38,7 @@ body {
 .digit {
 	background-color: #000;
 	color: #fff;
-	font-size: 120px;
+	font-size: 9rem;
 	display: flex;
 	align-items: center;
 	justify-content: center;
@@ -90,4 +91,63 @@ body {
 	100% {
 		transform: rotateX(-180deg);
 	}
+}
+
+.customCheck {
+	width: 120px;
+	height: auto;
+	position: absolute;
+	top: 5%;
+	right: 5%;
+	color: #888;
+	font-size: 1.2rem;
+	text-align: center;
+	cursor: pointer;
+}
+
+.customCheck input {
+	position: absolute;
+	opacity: 0;
+}
+
+.customCheck .checkmark {
+	width: 20px;
+	height: 10px;
+	position: absolute;
+	top: 7px;
+	left: 6px;
+	background: #888;
+	border-radius: 10px;
+	box-shadow: inset 0 0 2px #555;
+	transition: .2s ease-in-out;
+}
+
+.customCheck .checkmark::after {
+	content: '';
+	width: 15px;
+	height: 15px;
+	position: absolute;
+	top: -2.5px;
+	left: -10px;
+	background: #aaa;
+	border-radius: 50%;
+	box-shadow: 0 0 4px #333;
+	transition: .2s ease-in-out;
+}
+
+.customCheck input:checked~.checkmark::after {
+	left: 10px;
+	background: rgb(140, 140, 255);
+}
+
+.customCheck input:checked~.checkmark {
+	background: rgb(120, 120, 255);
+}
+
+#amOrPm {
+	position: absolute;
+		z-index: 999;
+		bottom: 10px;
+		left: 10px;
+		font-size: 1.2rem;
 }

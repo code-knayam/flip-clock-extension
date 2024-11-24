@@ -1,9 +1,15 @@
-// Check if it's local development or running as an extension
-const isLocalDev = window.location.protocol === "http:";
-updateClock(); // Initial call to display the correct time
+var format;
+initExtension();
 
-showClock();
-setInterval(updateClock, 1000);
+async function initExtension() {
+	const defaultFormat = await getPreference("format");
+	format = defaultFormat || 24;
+	updateFormatEle(format);
+	updateFormatSelectorStatus(format);
+	updateClock();
+	showClock();
+	setInterval(updateClock, 1000);
+}
 
 // Function to show clock and hide name input
 function showClock() {
@@ -47,8 +53,9 @@ function flip(element, newValue) {
 }
 
 function updateClock() {
+	updateAmOrPm();
 	const now = new Date();
-	const hours = now.getHours();
+	let hours = now.getHours();
 	const minutes = now.getMinutes();
 	const seconds = now.getSeconds();
 
@@ -56,7 +63,59 @@ function updateClock() {
 	const minutesEl = document.getElementById("minutes");
 	const secondsEl = document.getElementById("seconds");
 
+	if (format === 12) {
+		updateAmOrPm(hours >= 12 ? "PM" : "AM");
+		hours = hours % 12 || 12;
+	}
+
 	flip(hoursEl, hours);
 	flip(minutesEl, minutes);
 	flip(secondsEl, seconds);
+}
+
+function updateFormatSelectorStatus(format) {
+	const clockFormatEle = document.getElementById("formatSelector");
+	clockFormatEle.checked = format === 12;
+}
+
+document.getElementById("formatSelector").addEventListener("change", (e) => {
+	format = e?.target?.checked ? 12 : 24;
+	updateFormatEle(format);
+	updatePreference({ key: "format", val: format });
+});
+
+function updateFormatEle(clockFormat) {
+	const clockFormatEle = document.getElementById("clock-format");
+	if (clockFormatEle) {
+		clockFormatEle.innerText = `${clockFormat} Hour`;
+	}
+}
+
+function updateAmOrPm(tx) {
+	const amOrPm = document.getElementById("amOrPm");
+
+	if (tx) {
+		amOrPm.style.display = "unset";
+		amOrPm.innerText = tx;
+	} else {
+		amOrPm.style.display = "none";
+	}
+}
+
+async function updatePreference(pref) {
+	const prefs = await getPreferences();
+
+	if (prefs) {
+		prefs.preferences[pref.key] = pref.val;
+		chrome.storage.sync.set({ preferences: prefs.preferences });
+	}
+}
+
+async function getPreference(key) {
+	const pref = await getPreferences();
+	return pref && key ? pref.preferences[key] : "";
+}
+
+async function getPreferences() {
+	return await chrome.storage?.sync.get("preferences");
 }

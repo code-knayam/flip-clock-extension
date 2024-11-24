@@ -6,9 +6,17 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0">
 		<title>Flip Clock</title>
 		<link rel="stylesheet" href="assets/style.css">
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Cute+Font&display=swap" rel="stylesheet">
 	</head>
 
 	<body>
+		<label class="customCheck">
+			<span id="clock-format"></span>
+			<input type="checkbox" name="formatSelector" id="formatSelector">
+			<span class="checkmark"></span>
+		</label>
 		<div id="clock-container">
 			<div id="flipClock">
 				<div class="digit-container" id="hours">
@@ -21,6 +29,7 @@
 					<div class="digit flipper flipper-back">
 						<div class="flipper-digit">01</div>
 					</div>
+					<span id="amOrPm"></span>
 				</div>
 				<span class="separator">:</span>
 				<div class="digit-container" id="minutes">
