@@ -4,7 +4,6 @@ initExtension();
 async function initExtension() {
 	const defaultFormat = await getPreference("format");
 	format = defaultFormat || 24;
-	updateFormatEle(format);
 	updateFormatSelectorStatus(format);
 	updateClock();
 	showClock();
@@ -80,16 +79,8 @@ function updateFormatSelectorStatus(format) {
 
 document.getElementById("formatSelector").addEventListener("change", (e) => {
 	format = e?.target?.checked ? 12 : 24;
-	updateFormatEle(format);
 	updatePreference({ key: "format", val: format });
 });
-
-function updateFormatEle(clockFormat) {
-	const clockFormatEle = document.getElementById("clock-format");
-	if (clockFormatEle) {
-		clockFormatEle.innerText = `${clockFormat} Hour`;
-	}
-}
 
 function updateAmOrPm(tx) {
 	const amOrPm = document.getElementById("amOrPm");
@@ -103,7 +94,11 @@ function updateAmOrPm(tx) {
 }
 
 async function updatePreference(pref) {
-	const prefs = await getPreferences();
+	let prefs = await getPreferences();
+
+	if (!prefs || !prefs.preferences) {
+		prefs = { preferences: {} };
+	}
 
 	if (prefs) {
 		prefs.preferences[pref.key] = pref.val;
@@ -113,7 +108,7 @@ async function updatePreference(pref) {
 
 async function getPreference(key) {
 	const pref = await getPreferences();
-	return pref && key ? pref.preferences[key] : "";
+	return pref && key ? pref?.preferences?.[key] : "";
 }
 
 async function getPreferences() {
