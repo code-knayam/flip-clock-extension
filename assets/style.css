@@ -1,18 +1,32 @@
+:root, .black-theme {
+	--background-color: #000;
+	--primary-color: #fff;
+	--digit-background: linear-gradient(45deg, #000, #111, #222);
+	--icon-color: #aaa;
+	--selected-icon-color: #111;
+}
+
+.white-theme {
+	--background-color: #fff;
+	--primary-color: #000;
+	--digit-background: linear-gradient(45deg, #fff, #eee, #ddd);
+}
+
 body {
 	margin: 0;
 	font-family: "Varela", sans-serif;
 	font-weight: 400;
 	font-style: normal;
 }
-/* Center the container and set a futuristic background */
+
 #clock-container {
 	display: flex;
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	height: 100vh;
-	background-color: black;
-	color: white;
+	background-color: var(--background-color);
+	color: var(--primary-color);
 }
 
 #flipClock {
@@ -24,7 +38,7 @@ body {
 .separator {
 	font-size: 100px;
 	margin: 0 20px;
-	color: #fff;
+	color: var(--primary-color);
 }
 
 .digit-container {
@@ -36,8 +50,8 @@ body {
 }
 
 .digit {
-	background-color: #000;
-	color: #fff;
+	background-color: var(--background-color);
+	color: var(--primary-color);
 	font-size: 6.2rem;
 	display: flex;
 	align-items: center;
@@ -46,7 +60,7 @@ body {
 	width: 100%;
 	height: 100%;
 	border-radius: 10px;
-	background: linear-gradient(45deg, #000, #111, #222);
+	background: var(--digit-background);
 }
 
 .flipper {
@@ -58,6 +72,7 @@ body {
 	backface-visibility: hidden;
 	z-index: 2;
 }
+
 .flipper-back {
 	transform-origin: center;
 	backface-visibility: unset;
@@ -73,7 +88,7 @@ body {
 	position: absolute;
 	width: 100%;
 	height: 6px;
-	background: #000;
+	background: var(--background-color);
 	z-index: 99;
 }
 
@@ -85,21 +100,28 @@ body {
 	0% {
 		transform: rotateX(0deg);
 	}
+
 	100% {
 		transform: rotateX(-180deg);
 	}
+}
+.settings {
+	position: absolute;
+	top: 5%;
+	right: 5%;
+	color: #888;
+	display: flex;
+	flex-direction: row;
+	gap: 8px;
 }
 
 .customCheck {
 	width: 140px;
 	height: auto;
-	position: absolute;
-	top: 5%;
-	right: 5%;
-	color: #888;
 	font-size: 1rem;
 	text-align: center;
 	cursor: pointer;
+	display: block;
 }
 
 .customCheck input {
@@ -143,8 +165,22 @@ body {
 
 #amOrPm {
 	position: absolute;
-		z-index: 999;
-		bottom: 10px;
-		left: 10px;
-		font-size: 1.2rem;
+	z-index: 999;
+	bottom: 10px;
+	left: 10px;
+	font-size: 1.2rem;
+}
+
+.theme-toggle-container {
+	width: auto;
+}
+.icon svg {
+	fill: var(--icon-color);
+	width: 24px;
+	height: 24px;
+	cursor: pointer;
+}
+
+.icon-selected svg {
+	fill: var(--selected-icon-color);
 }

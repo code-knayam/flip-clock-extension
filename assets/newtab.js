@@ -1,10 +1,18 @@
 var format;
+var theme;
+
 initExtension();
 
 async function initExtension() {
 	const defaultFormat = await getPreference("format");
 	format = defaultFormat || 24;
+
+	const defaultTheme = await getPreference("theme");
+	theme = defaultTheme || "black-theme";
+
 	updateFormatSelectorStatus(format);
+	updateAppTheme(theme);
+
 	updateClock();
 	showClock();
 	setInterval(updateClock, 1000);
@@ -77,9 +85,30 @@ function updateFormatSelectorStatus(format) {
 	clockFormatEle.checked = format === 12;
 }
 
+function updateAppTheme(newTheme) {
+	const themeToggleEle = document.getElementById("theme-toggle");
+	const icon = document.querySelector(".theme-toggle-container span");
+
+	if (newTheme === "white-theme") {
+		themeToggleEle.checked = true;
+		icon.classList.add("icon-selected");
+	} else {
+		icon.classList.remove("icon-selected");
+	}
+
+	document.getElementsByTagName("body")[0].classList.add(newTheme);
+}
+
 document.getElementById("formatSelector").addEventListener("change", (e) => {
 	format = e?.target?.checked ? 12 : 24;
 	updatePreference({ key: "format", val: format });
+});
+
+document.getElementById("theme-toggle").addEventListener("change", (e) => {
+	document.getElementsByTagName("body")[0].classList.remove(theme);
+	theme = e?.target?.checked ? "white-theme" : "black-theme";
+	updatePreference({ key: "theme", val: theme });
+	updateAppTheme(theme);
 });
 
 function updateAmOrPm(tx) {
