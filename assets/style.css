@@ -4,12 +4,14 @@
 	--digit-background: linear-gradient(45deg, #000, #111, #222);
 	--icon-color: #aaa;
 	--selected-icon-color: #111;
+	--ring-stroke: rgba(255, 255, 255, 0.1);
 }
 
 .white-theme {
 	--background-color: #fff;
 	--primary-color: #000;
-	--digit-background: linear-gradient(45deg, #fff, #eee, #ddd);
+	--digit-background: linear-gradient(45deg, #eee, #ddd, #ccc);
+	--ring-stroke: rgba(1, 1, 1, 0.3);
 }
 
 body {
@@ -171,9 +173,11 @@ body {
 	font-size: 1.2rem;
 }
 
-.theme-toggle-container {
+.nav-item {
 	width: auto;
+	margin: 0 8px;
 }
+
 .icon svg {
 	fill: var(--icon-color);
 	width: 24px;

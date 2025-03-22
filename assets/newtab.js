@@ -88,12 +88,16 @@ function updateFormatSelectorStatus(format) {
 function updateAppTheme(newTheme) {
 	const themeToggleEle = document.getElementById("theme-toggle");
 	const icon = document.querySelector(".theme-toggle-container span");
+	const timerIcon = document.querySelector(".pomodoro-toggle-container span");
+
 
 	if (newTheme === "white-theme") {
 		themeToggleEle.checked = true;
 		icon.classList.add("icon-selected");
+		timerIcon.classList.add('icon-selected')
 	} else {
 		icon.classList.remove("icon-selected");
+		timerIcon.classList.remove("icon-selected");
 	}
 
 	document.getElementsByTagName("body")[0].classList.add(newTheme);

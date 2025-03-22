@@ -1,0 +1,150 @@
+.pomodoro-icon {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  filter: invert(1);
+}
+
+.pomodoro-drawer {
+  position: fixed;
+  top: 0;
+  right: -600px; /* Start off-screen */
+  height: 100vh;
+  background: var(--background-color);
+  transition: right 0.3s ease;
+  padding: 30px;
+  box-sizing: border-box;
+  color: var(--primary-color);
+  box-shadow: -1px 0 20px rgba(255, 255, 255, 0.05),
+              -2px 0 15px rgba(0, 0, 0, 0.4),
+              -4px 0 35px rgba(0, 0, 0, 0.6);
+}
+
+.pomodoro-drawer.show {
+  right: 0;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.close-drawer {
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.close-drawer:hover {
+  opacity: 1;
+}
+
+.title {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 40px;
+    margin-top: 32px;
+}
+
+.title h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: normal;
+}
+
+.phase {
+  text-align: center;
+  font-size: 1.2rem;
+  margin: 40px 0;
+}
+
+.timer-circle {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto 40px;
+  margin-top: 64px;
+}
+
+.progress-ring {
+  transform: rotate(-90deg);
+  width: 200px;
+  height: 200px;
+}
+
+.progress-ring-circle {
+  fill: transparent;
+  stroke: #4CAF50;
+  stroke-width: 8;
+  transition: stroke-dashoffset 0.3s;
+  transform-origin: center;
+  transform: rotate(0deg);
+}
+
+.progress-ring-background {
+  fill: transparent;
+  stroke: var(--ring-stroke);
+  stroke-width: 8;
+}
+
+.timer-display {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  text-align: center;
+}
+
+.pomodoro-btn {
+  display: block;
+  width: 150px;
+  margin: 0 auto;
+  background: #4CAF50;
+  border: none;
+  color: white;
+  padding: 12px 0;
+  border-radius: 25px;
+  cursor: pointer;
+  font-size: 1.1rem;
+  transition: background 0.2s;
+}
+
+.pomodoro-btn:hover {
+  background: #45a049;
+}
+
+/* Add styles for the controls and reset button */
+.pomodoro-controls {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+.pomodoro-btn, .reset-btn {
+    width: 120px;
+    margin: 0;
+    background: #4CAF50;
+    border: none;
+    color: white;
+    padding: 12px 0;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    transition: background 0.2s;
+}
+
+.reset-btn {
+    background: #666;
+}
+
+.reset-btn:hover {
+    background: #555;
+} 
