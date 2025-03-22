@@ -6,9 +6,9 @@ const TIMER_PHASES = {
 }
 
 const DEFAULT_PHASES = {
-    [TIMER_PHASES.WORK]: 25 * 1,      
-    [TIMER_PHASES.SHORT_BREAK]: 5 * 1, 
-    [TIMER_PHASES.LONG_BREAK]: 15 * 1  
+    [TIMER_PHASES.WORK]: 25 * 60,      
+    [TIMER_PHASES.SHORT_BREAK]: 5 * 60, 
+    [TIMER_PHASES.LONG_BREAK]: 15 * 60 
 };
 
 const MESSAGES = {
@@ -18,25 +18,17 @@ const MESSAGES = {
     RESET_TIMER: 'RESET_TIMER'
 }
 
-const DEFAULT_TIMER_STATE = {
-    timeLeft: DEFAULT_PHASES.WORK,
-    currentPhase: TIMER_PHASES.WORK,
-    isRunning: false,
-    pomodoroCount: 0,
-    phases: DEFAULT_PHASES
-}; 
-
-let timer = DEFAULT_TIMER_STATE;
+let timer = getDefaultTimerState();
 
 // Initialize state on extension install or update
 chrome.runtime.onInstalled.addListener(() => {
     // Reset timer state
-    timer = DEFAULT_TIMER_STATE;
+    timer = getDefaultTimerState();
 
     // Clear and reset storage
     chrome.storage.local.clear(() => {
         chrome.storage.local.set({
-            ...DEFAULT_TIMER_STATE
+            ...getDefaultTimerState()
         });
     });
 
@@ -121,14 +113,14 @@ function handleStopTimerEvent() {
 }
 
 function handleResetTimerEvent() {
-    timer = DEFAULT_TIMER_STATE;
+    timer = getDefaultTimerState();
 
     // Clear alarm if running
     chrome.alarms.clear('pomodoroTimer');
 
     // Reset storage
     chrome.storage.local.set({
-        ...DEFAULT_TIMER_STATE
+        ...getDefaultTimerState()
     });
 
     sendTimerUpdate();
@@ -206,4 +198,16 @@ function sendNotification() {
         message: message,
         silent: true,
     });
+}
+
+function getDefaultTimerState() {
+    const DEFAULT_TIMER_STATE = {
+        timeLeft: DEFAULT_PHASES.WORK,
+        currentPhase: TIMER_PHASES.WORK,
+        isRunning: false,
+        pomodoroCount: 0,
+        phases: DEFAULT_PHASES
+    }; 
+
+    return JSON.parse(JSON.stringify(DEFAULT_TIMER_STATE));
 }

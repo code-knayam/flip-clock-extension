@@ -1,7 +1,7 @@
 const DEFAULT_PHASES = {
-    WORK: 25 * 1,      
-    SHORT_BREAK: 5 * 1, 
-    LONG_BREAK: 15 * 1  
+    WORK: 25 * 60,      
+    SHORT_BREAK: 5 * 60, 
+    LONG_BREAK: 15 * 60  
 };
 
 class PomodoroTimer {

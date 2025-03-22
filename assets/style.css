@@ -5,6 +5,9 @@
 	--icon-color: #aaa;
 	--selected-icon-color: #111;
 	--ring-stroke: rgba(255, 255, 255, 0.1);
+	--pomodoro-overlay-shadow: -1px 0 20px rgba(255, 255, 255, 0.05),
+				-2px 0 15px rgba(0, 0, 0, 0.4),
+				-4px 0 35px rgba(0, 0, 0, 0.6);
 }
 
 .white-theme {
@@ -12,6 +15,8 @@
 	--primary-color: #000;
 	--digit-background: linear-gradient(45deg, #eee, #ddd, #ccc);
 	--ring-stroke: rgba(1, 1, 1, 0.3);
+	--pomodoro-overlay-shadow: -1px 0 20px rgba(255, 255, 255, 0.05),
+				-4px 0 35px rgba(100, 100, 100, 0.6);
 }
 
 body {
