@@ -1,7 +1,7 @@
 const DEFAULT_PHASES = {
-    WORK: 25 * 60,      
-    SHORT_BREAK: 5 * 60, 
-    LONG_BREAK: 15 * 60  
+    WORK: 25 * 1,      
+    SHORT_BREAK: 5 * 1, 
+    LONG_BREAK: 15 * 1  
 };
 
 class PomodoroTimer {
@@ -11,6 +11,7 @@ class PomodoroTimer {
         this.setupEventListeners();
         this.loadState();
         this.setupProgressRing();
+        this.tickInterval = null;
     }
 
     initializeElements() {
@@ -67,15 +68,31 @@ class PomodoroTimer {
         chrome.runtime.onMessage.addListener((message) => {
             if (message.type === 'TIMER_UPDATE') {
                 this.updateDisplay(message.timeLeft, message.currentPhase, message.isRunning, message.pomodoroCount);
+                
+                if(message.isPhaseChange) {
+                    this.startTimer();
+                }
             }
         });
     }
 
     loadState() {
-        chrome.storage.local.get(['timeLeft', 'currentPhase', 'isRunning', 'pomodoroCount'], (result) => {
+        chrome.storage.local.get(['timeLeft', 'currentPhase', 'isRunning', 'pomodoroCount', 'timerStartTime'], (result) => {
             if (result.timeLeft !== undefined) {
+                let timeLeft = result.timeLeft;
+                
+                // If timer is running, calculate actual time remaining
+                if (result.isRunning && result.timerStartTime) {
+                    const now = Date.now();
+                    const elapsedSeconds = Math.floor((now - result.timerStartTime) / 1000);
+                    timeLeft = Math.max(result.timeLeft - elapsedSeconds, 0);
+                    
+                    // Start UI updates if timer is running
+                    this.startUIUpdates();
+                }
+
                 this.updateDisplay(
-                    result.timeLeft, 
+                    timeLeft, 
                     result.currentPhase, 
                     result.isRunning,
                     result.pomodoroCount
@@ -86,8 +103,10 @@ class PomodoroTimer {
 
     startTimer() {
         chrome.storage.local.get(['phases'], (result) => {
-            // Update UI immediately
             this.button.textContent = 'Stop';
+            
+            // Start local UI updates
+            this.startUIUpdates();
             
             chrome.runtime.sendMessage({ 
                 type: 'START_TIMER',
@@ -96,11 +115,49 @@ class PomodoroTimer {
         });
     }
 
+    startUIUpdates() {
+        if (this.tickInterval) {
+            clearInterval(this.tickInterval);
+        }
+
+        this.tickInterval = setInterval(() => {
+            chrome.storage.local.get(['timeLeft', 'currentPhase', 'isRunning', 'timerStartTime','pomodoroCount'], (result) => {
+                if (result.isRunning) {
+                    // Calculate actual time remaining based on start time
+                    const now = Date.now();
+                    const elapsedSeconds = Math.floor((now - result.timerStartTime) / 1000);
+                    const actualTimeLeft = Math.max(result.timeLeft - elapsedSeconds, 0);
+
+                    this.updateDisplay(
+                        actualTimeLeft,
+                        result.currentPhase,
+                        result.isRunning,
+                        result.pomodoroCount
+                    );
+
+                    // If time's up, trigger phase change from UI
+                    if (actualTimeLeft <= 0) {
+                        clearInterval(this.tickInterval);
+                        chrome.runtime.sendMessage({ type: 'PHASE_COMPLETE' });
+                    }
+                } else {
+                    clearInterval(this.tickInterval);
+                }
+            });
+        }, 1000);
+    }
+
     stopTimer() {
+        if (this.tickInterval) {
+            clearInterval(this.tickInterval);
+        }
         chrome.runtime.sendMessage({ type: 'STOP_TIMER' });
     }
 
     resetTimer() {
+        if (this.tickInterval) {
+            clearInterval(this.tickInterval);
+        }
         chrome.runtime.sendMessage({ type: 'RESET_TIMER' });
     }
 

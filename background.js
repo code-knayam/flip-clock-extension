@@ -6,16 +6,17 @@ const TIMER_PHASES = {
 }
 
 const DEFAULT_PHASES = {
-    [TIMER_PHASES.WORK]: 25 * 60,      
-    [TIMER_PHASES.SHORT_BREAK]: 5 * 60, 
-    [TIMER_PHASES.LONG_BREAK]: 15 * 60 
+    [TIMER_PHASES.WORK]: 25 * 1,      
+    [TIMER_PHASES.SHORT_BREAK]: 5 * 1, 
+    [TIMER_PHASES.LONG_BREAK]: 15 * 1 
 };
 
 const MESSAGES = {
     START_TIMER: 'START_TIMER',
     STOP_TIMER: 'STOP_TIMER',
     TIMER_UPDATE: 'TIMER_UPDATE',
-    RESET_TIMER: 'RESET_TIMER'
+    RESET_TIMER: 'RESET_TIMER',
+    PHASE_COMPLETE: 'PHASE_COMPLETE'
 }
 
 let timer = getDefaultTimerState();
@@ -62,6 +63,9 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
         case MESSAGES.RESET_TIMER:
             handleResetTimerEvent();
             break;
+        case MESSAGES.PHASE_COMPLETE:
+            handlePhaseComplete();
+            break;
         default:
             console.error('invalid message type');
     }
@@ -69,7 +73,8 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
 
 chrome.alarms.onAlarm.addListener((alarm) => {
     if (alarm.name === 'pomodoroTimer' && timer.isRunning) {
-        timer.timeLeft--;
+        // Decrease by 60 seconds since alarm fires every minute
+        timer.timeLeft -= 60;
         
         if (timer.timeLeft <= 0) {
             playChime();
@@ -83,7 +88,7 @@ chrome.alarms.onAlarm.addListener((alarm) => {
             pomodoroCount: timer.pomodoroCount
         });
 
-        sendTimerUpdate();        
+        sendTimerUpdate(true);        
     }
 });
 
@@ -127,12 +132,17 @@ function handleResetTimerEvent() {
 }
 
 function startAlarm() {
+    // Create a minute-based alarm for background tracking
     chrome.alarms.create('pomodoroTimer', {
-        periodInMinutes: 1/60  // Fires every second
+        periodInMinutes: 1  // Fire every minute
     });
+
+    // Store the start time
+    const now = Date.now();
+    chrome.storage.local.set({ timerStartTime: now });
 }
 
-function sendTimerUpdate() {
+function sendTimerUpdate(isPhaseChange) {
     chrome.tabs.query({}, (tabs) => {  // Query all tabs
         tabs.forEach(tab => {
             // Check if it's a new tab URL
@@ -142,7 +152,8 @@ function sendTimerUpdate() {
                     timeLeft: timer.timeLeft,
                     currentPhase: timer.currentPhase,
                     isRunning: timer.isRunning,
-                    pomodoroCount: timer.pomodoroCount
+                    pomodoroCount: timer.pomodoroCount,
+                    isPhaseChange
                 });
             }
         });
@@ -163,6 +174,10 @@ function moveToNextPhase() {
         timer.currentPhase = TIMER_PHASES.WORK;
         timer.timeLeft = timer.phases.WORK;
     }
+
+    // Update timer start time for new phase
+    const now = Date.now();
+    chrome.storage.local.set({ timerStartTime: now });
 }
 
 async function createOffscreen() {
@@ -210,4 +225,18 @@ function getDefaultTimerState() {
     }; 
 
     return JSON.parse(JSON.stringify(DEFAULT_TIMER_STATE));
+}
+
+function handlePhaseComplete() {
+    playChime();
+    moveToNextPhase();
+    
+    // Save state
+    chrome.storage.local.set({
+        timeLeft: timer.timeLeft,
+        currentPhase: timer.currentPhase,
+        pomodoroCount: timer.pomodoroCount
+    });
+
+    sendTimerUpdate(true);
 }
