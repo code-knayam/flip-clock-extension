@@ -6,9 +6,9 @@ const TIMER_PHASES = {
 }
 
 const DEFAULT_PHASES = {
-    [TIMER_PHASES.WORK]: 25 * 1,      
-    [TIMER_PHASES.SHORT_BREAK]: 5 * 1, 
-    [TIMER_PHASES.LONG_BREAK]: 15 * 1 
+    [TIMER_PHASES.WORK]: 25 * 60,      
+    [TIMER_PHASES.SHORT_BREAK]: 5 * 60, 
+    [TIMER_PHASES.LONG_BREAK]: 15 * 60 
 };
 
 const MESSAGES = {
